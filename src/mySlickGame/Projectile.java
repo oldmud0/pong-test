@@ -1,15 +1,11 @@
 package mySlickGame;
 
-import java.util.ArrayList;
-
+import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 
-public class Projectile {
+public class Projectile extends Entity {
 	
 	private int speed;
-	private int size;
-	
-	private int posX,posY;
 	
 	/** Creates new projectile. X and Y are the coordinates for the top left corner of the projectile.
 	 * 
@@ -18,44 +14,23 @@ public class Projectile {
 	 * @param speed
 	 * @param size
 	 */
-	public Projectile(int X, int Y, int spd, int siz) {
-		posX = X;
-		posY = Y;
-		speed = spd;
-		size = siz;
+	public Projectile(int x, int y, int speed, int size) {
+		super(x, y, size, size);
+		this.speed = speed;
 	}
 	
+	@Override
 	public void render(Graphics g) {
-		
-		g.fillRect(posX,posY,size,size);
-		
-		
+		g.setColor(new Color(0, 0, 0));
+		g.fillRect(0, 0, w, h);
 	}
 	
-	public boolean update() {
-		if (posX > SlickGame.windowX || posY > SlickGame.windowY) {
-			return true;
-		} else
-			posY -= speed;
-			return false;
-	}
-	
-	
-	public static void projectileRenderAll(Graphics g, ArrayList<Projectile> projectileList) {
-		Projectile proj;
-		for (int i = 0; i < projectileList.size(); i++) {
-			proj = projectileList.get(i);
-			proj.render(g);
+	@Override
+	public void update(int delta) {
+		if (y > 0) {
+			y -= speed;
+		} else {
+			SlickGame.instance.entities.remove(this);
 		}
-		proj = null;
-	}
-	
-	public static void projectileUpdateAll(ArrayList<Projectile> projectileList) {
-		Projectile proj;
-		for (int i = 0; i < projectileList.size(); i++) {
-			proj = projectileList.get(i);
-			proj.update();
-		}
-		proj = null;
 	}
 }
